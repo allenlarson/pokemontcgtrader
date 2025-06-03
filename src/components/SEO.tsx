@@ -9,12 +9,12 @@ interface SEOProps {
 }
 
 export function SEO({
-  title = 'Pokemon TCG Trader - Trade Pokemon Cards Online',
+  title = 'PokéTrader.app - Share your wishlist of tradeable Pokémon cards',
   description = 'Connect with fellow Pokemon TCG trainers, share your collection, and find the cards you need to complete your deck. Create your public trading profile and start trading today!',
   image = '/og-preview.png',
-  url = 'https://pokemontcgtrader.com',
+  url = 'https://poketrader.app',
   type = 'website',
-}: SEOProps) {
+}: SEOProps): null {
   useEffect(() => {
     // Update title
     document.title = title;

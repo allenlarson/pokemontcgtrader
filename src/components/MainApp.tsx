@@ -29,7 +29,7 @@ export function MainApp() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-4">
               <h1 className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                Pokemon TCG Trader
+                PokéTrader App
               </h1>
               {userProfile && (
                 <span className="text-gray-600 dark:text-gray-300">
