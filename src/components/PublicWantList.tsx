@@ -1,11 +1,17 @@
-import { useQuery } from "convex/react";
-import { api } from "../../convex/_generated/api";
-import { useParams, Link } from "react-router-dom";
+import { useQuery } from 'convex/react';
+import { api } from '../../convex/_generated/api';
+import { useParams, Link } from 'react-router-dom';
 
 export function PublicWantList() {
   const { username } = useParams<{ username: string }>();
-  const profile = useQuery(api.profiles.getProfileByUsername, username ? { username } : "skip");
-  const wantList = useQuery(api.cards.getUserWantList, profile ? { userId: profile.userId } : "skip");
+  const profile = useQuery(
+    api.profiles.getProfileByUsername,
+    username ? { username } : 'skip'
+  );
+  const wantList = useQuery(
+    api.cards.getUserWantList,
+    profile ? { userId: profile.userId } : 'skip'
+  );
 
   if (profile === undefined) {
     return (
@@ -20,10 +26,14 @@ export function PublicWantList() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="text-gray-400 text-6xl mb-4">👤</div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Profile Not Found</h1>
-          <p className="text-gray-600 mb-4">The user "{username}" doesn't exist.</p>
-          <Link 
-            to="/" 
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">
+            Profile Not Found
+          </h1>
+          <p className="text-gray-600 mb-4">
+            The user "{username}" doesn't exist.
+          </p>
+          <Link
+            to="/"
             className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
           >
             Go Home
@@ -34,17 +44,22 @@ export function PublicWantList() {
   }
 
   const formatCondition = (condition: string) => {
-    return condition.split('_').map(word => 
-      word.charAt(0).toUpperCase() + word.slice(1)
-    ).join(' ');
+    return condition
+      .split('_')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "high": return "text-red-600 bg-red-100";
-      case "medium": return "text-yellow-600 bg-yellow-100";
-      case "low": return "text-green-600 bg-green-100";
-      default: return "text-gray-600 bg-gray-100";
+      case 'high':
+        return 'text-red-600 bg-red-100';
+      case 'medium':
+        return 'text-yellow-600 bg-yellow-100';
+      case 'low':
+        return 'text-green-600 bg-green-100';
+      default:
+        return 'text-gray-600 bg-gray-100';
     }
   };
 
@@ -55,10 +70,10 @@ export function PublicWantList() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link to="/" className="text-2xl font-bold text-blue-600">
-              Pokemon TCG Trader
+              PokéTrader App
             </Link>
-            <Link 
-              to="/" 
+            <Link
+              to="/"
               className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
             >
               Sign In
@@ -71,7 +86,10 @@ export function PublicWantList() {
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <nav className="flex items-center space-x-2 text-sm">
-            <Link to={`/trade/${username}`} className="text-blue-600 hover:text-blue-700">
+            <Link
+              to={`/trade/${username}`}
+              className="text-blue-600 hover:text-blue-700"
+            >
               {profile.username}
             </Link>
             <span className="text-gray-400">/</span>
@@ -90,19 +108,21 @@ export function PublicWantList() {
               </span>
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">{profile.username}'s Want List</h1>
+              <h1 className="text-3xl font-bold text-gray-900">
+                {profile.username}'s Want List
+              </h1>
               <p className="text-gray-600">Cards they're looking to acquire</p>
             </div>
           </div>
-          
+
           <div className="flex gap-4">
-            <Link 
+            <Link
               to={`/trade/${username}`}
               className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors"
             >
               ← Back to Profile
             </Link>
-            <Link 
+            <Link
               to={`/trade/${username}/cards`}
               className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
             >
@@ -121,8 +141,11 @@ export function PublicWantList() {
 
           {wantList && wantList.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-              {wantList.map((item) => (
-                <div key={item._id} className="border rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+              {wantList.map(item => (
+                <div
+                  key={item._id}
+                  className="border rounded-lg overflow-hidden hover:shadow-md transition-shadow"
+                >
                   <div className="aspect-[3/4] bg-gray-100">
                     {item.card?.imageUrl ? (
                       <img
@@ -138,10 +161,10 @@ export function PublicWantList() {
                   </div>
                   <div className="p-4">
                     <h3 className="font-semibold text-gray-900 mb-1">
-                      {item.card?.name || "Unknown Card"}
+                      {item.card?.name || 'Unknown Card'}
                     </h3>
                     <p className="text-sm text-gray-600 mb-2">
-                      {item.card?.setName || "Unknown Set"}
+                      {item.card?.setName || 'Unknown Set'}
                     </p>
                     {/* {item.card?.rarity && (
                       <p className="text-sm text-gray-500 mb-2">{item.card.rarity}</p>
@@ -184,7 +207,8 @@ export function PublicWantList() {
                 No cards in want list
               </h3>
               <p className="text-gray-500">
-                {profile.username} hasn't added any cards to their want list yet.
+                {profile.username} hasn't added any cards to their want list
+                yet.
               </p>
             </div>
           )}
@@ -192,14 +216,17 @@ export function PublicWantList() {
 
         {/* Contact Info */}
         <div className="bg-white rounded-lg shadow p-6 mt-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Have These Cards?</h2>
+          <h2 className="text-xl font-bold text-gray-900 mb-4">
+            Have These Cards?
+          </h2>
           <p className="text-gray-600 mb-4">
-            If you have any of the cards {profile.username} is looking for, contact them to discuss a trade!
+            If you have any of the cards {profile.username} is looking for,
+            contact them to discuss a trade!
           </p>
           {profile.socialLinks && (
             <div className="flex gap-4 mb-4">
               {profile.socialLinks.twitter && (
-                <a 
+                <a
                   href={`https://twitter.com/${profile.socialLinks.twitter.replace('@', '')}`}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -209,7 +236,7 @@ export function PublicWantList() {
                 </a>
               )}
               {profile.socialLinks.instagram && (
-                <a 
+                <a
                   href={`https://instagram.com/${profile.socialLinks.instagram.replace('@', '')}`}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -227,7 +254,8 @@ export function PublicWantList() {
           )}
           <div className="bg-yellow-50 rounded-lg p-4">
             <p className="text-sm text-yellow-800">
-              <strong>Trading Tip:</strong> Check the priority levels and condition requirements before reaching out.
+              <strong>Trading Tip:</strong> Check the priority levels and
+              condition requirements before reaching out.
             </p>
           </div>
         </div>
