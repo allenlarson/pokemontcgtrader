@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
-import { useQuery, useMutation, useAction } from "convex/react";
-import { api } from "../../convex/_generated/api";
-import { toast } from "sonner";
+import { useState, useEffect } from 'react';
+import { useQuery, useMutation, useAction } from 'convex/react';
+import { api } from '../../convex/_generated/api';
+import { toast } from 'sonner';
 
 export function CardSearch() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedSet, setSelectedSet] = useState("");
-  const [selectedRarity, setSelectedRarity] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedSet, setSelectedSet] = useState('');
+  const [selectedRarity, setSelectedRarity] = useState('');
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -14,15 +14,17 @@ export function CardSearch() {
   const [isLoadingAllCards, setIsLoadingAllCards] = useState(false);
 
   const [hasSearched, setHasSearched] = useState(false);
-  
+
   const cards = useQuery(
     api.cards.searchCards,
-    hasSearched ? {
-      searchTerm: searchTerm || undefined,
-      setId: selectedSet || undefined,
-      rarity: selectedRarity || undefined,
-      types: selectedTypes.length > 0 ? selectedTypes : undefined,
-    } : "skip"
+    hasSearched
+      ? {
+          searchTerm: searchTerm || undefined,
+          setId: selectedSet || undefined,
+          rarity: selectedRarity || undefined,
+          types: selectedTypes.length > 0 ? selectedTypes : undefined,
+        }
+      : 'skip'
   );
 
   const sets = useQuery(api.sets.getAllSets);
@@ -34,15 +36,39 @@ export function CardSearch() {
   const addToWants = useMutation(api.cards.addToWantList);
 
   const pokemonTypes = [
-    "Fire", "Water", "Grass", "Electric", "Psychic", "Ice", 
-    "Fighting", "Poison", "Ground", "Flying", "Bug", "Rock", 
-    "Ghost", "Dragon", "Dark", "Steel", "Fairy", "Normal"
+    'Fire',
+    'Water',
+    'Grass',
+    'Electric',
+    'Psychic',
+    'Ice',
+    'Fighting',
+    'Poison',
+    'Ground',
+    'Flying',
+    'Bug',
+    'Rock',
+    'Ghost',
+    'Dragon',
+    'Dark',
+    'Steel',
+    'Fairy',
+    'Normal',
   ];
 
   const rarities = [
-    "Common", "Uncommon", "Rare", "Rare Holo", "Rare Holo EX", 
-    "Rare Holo GX", "Rare Holo V", "Rare Holo VMAX", "Rare Ultra",
-    "Rare Secret", "Rare Rainbow", "Promo"
+    'Common',
+    'Uncommon',
+    'Rare',
+    'Rare Holo',
+    'Rare Holo EX',
+    'Rare Holo GX',
+    'Rare Holo V',
+    'Rare Holo VMAX',
+    'Rare Ultra',
+    'Rare Secret',
+    'Rare Rainbow',
+    'Promo',
   ];
 
   useEffect(() => {
@@ -55,12 +81,12 @@ export function CardSearch() {
           toast.success(result.message);
         }
       } catch (error) {
-        console.error("Failed to load recent sets:", error);
+        console.error('Failed to load recent sets:', error);
         // Fallback to loading all sets
         try {
           await fetchSets();
         } catch (fallbackError) {
-          console.error("Failed to load sets:", fallbackError);
+          console.error('Failed to load sets:', fallbackError);
         }
       } finally {
         setIsLoadingSets(false);
@@ -75,7 +101,9 @@ export function CardSearch() {
       const result = await fetchSets();
       toast.success(result.message);
     } catch (error) {
-      toast.error("Failed to load all sets. Please check your API key configuration.");
+      toast.error(
+        'Failed to load all sets. Please check your API key configuration.'
+      );
     } finally {
       setIsLoadingSets(false);
     }
@@ -91,9 +119,11 @@ export function CardSearch() {
         pageSize: 20,
       });
       setHasSearched(true); // Enable the query after fetching
-      toast.success("Cards loaded successfully!");
+      toast.success('Cards loaded successfully!');
     } catch (error) {
-      toast.error("Failed to fetch cards. Please check your API key configuration.");
+      toast.error(
+        'Failed to fetch cards. Please check your API key configuration.'
+      );
     } finally {
       setIsLoading(false);
     }
@@ -101,7 +131,7 @@ export function CardSearch() {
 
   const handleLoadAllCardsFromSet = async () => {
     if (!selectedSet) {
-      toast.error("Please select a set first");
+      toast.error('Please select a set first');
       return;
     }
 
@@ -111,7 +141,9 @@ export function CardSearch() {
       setHasSearched(true); // Enable the query after fetching
       toast.success(result.message);
     } catch (error) {
-      toast.error("Failed to load all cards from set. Please check your API key configuration.");
+      toast.error(
+        'Failed to load all cards from set. Please check your API key configuration.'
+      );
     } finally {
       setIsLoadingAllCards(false);
     }
@@ -121,12 +153,12 @@ export function CardSearch() {
     try {
       await addToTradeable({
         cardId,
-        condition: "near_mint",
+        condition: 'near_mint',
         quantity: 1,
       });
-      toast.success("Added to tradeable cards!");
+      toast.success('Added to tradeable cards!');
     } catch (error) {
-      toast.error("Failed to add card");
+      toast.error('Failed to add card');
     }
   };
 
@@ -134,33 +166,35 @@ export function CardSearch() {
     try {
       await addToWants({
         cardId,
-        priority: "medium",
-        maxCondition: "lightly_played",
+        priority: 'medium',
+        maxCondition: 'lightly_played',
       });
-      toast.success("Added to want list!");
+      toast.success('Added to want list!');
     } catch (error) {
-      toast.error("Failed to add card");
+      toast.error('Failed to add card');
     }
   };
 
   const toggleType = (type: string) => {
-    setSelectedTypes(prev => 
-      prev.includes(type) 
-        ? prev.filter(t => t !== type)
-        : [...prev, type]
+    setSelectedTypes(prev =>
+      prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]
     );
   };
 
   // Sort sets by release date (newest first)
   const sortedSets = sets?.sort((a, b) => {
-    return new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime();
+    return (
+      new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime()
+    );
   });
 
   return (
     <div className="space-y-6">
       <div className="bg-white rounded-lg shadow p-6">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">Search Pokemon Cards</h2>
+          <h2 className="text-2xl font-bold text-gray-900">
+            Search Pokemon Cards
+          </h2>
           <div className="flex gap-2">
             {/* <button
               onClick={handleLoadAllSets}
@@ -174,11 +208,11 @@ export function CardSearch() {
               disabled={isLoadingAllCards || !selectedSet}
               className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              {isLoadingAllCards ? "Loading..." : "Load All Cards from Set"}
+              {isLoadingAllCards ? 'Loading...' : 'Load All Cards from Set'}
             </button>
           </div>
         </div>
-        
+
         {/* Search filters */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           <div>
@@ -188,7 +222,7 @@ export function CardSearch() {
             <input
               type="text"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={e => setSearchTerm(e.target.value)}
               placeholder="Enter card name..."
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
@@ -200,7 +234,7 @@ export function CardSearch() {
             </label>
             <select
               value={selectedSet}
-              onChange={(e) => setSelectedSet(e.target.value)}
+              onChange={e => setSelectedSet(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="">All sets</option>
@@ -218,12 +252,14 @@ export function CardSearch() {
             </label>
             <select
               value={selectedRarity}
-              onChange={(e) => setSelectedRarity(e.target.value)}
+              onChange={e => setSelectedRarity(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="">All rarities</option>
               {rarities.map(rarity => (
-                <option key={rarity} value={rarity}>{rarity}</option>
+                <option key={rarity} value={rarity}>
+                  {rarity}
+                </option>
               ))}
             </select>
           </div>
@@ -234,7 +270,7 @@ export function CardSearch() {
               disabled={isLoading}
               className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              {isLoading ? "Searching..." : "Search Cards"}
+              {isLoading ? 'Searching...' : 'Search Cards'}
             </button>
           </div>
         </div>
@@ -251,8 +287,8 @@ export function CardSearch() {
                 onClick={() => toggleType(type)}
                 className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
                   selectedTypes.includes(type)
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                 }`}
               >
                 {type}
@@ -260,22 +296,15 @@ export function CardSearch() {
             ))}
           </div>
         </div>
-
-        {/* Instructions */}
-        <div className="mt-4 p-4 bg-blue-50 rounded-lg">
-          <h3 className="font-medium text-blue-900 mb-2">How to use:</h3>
-          <ul className="text-sm text-blue-800 space-y-1">
-            <li>• <strong>Search Cards:</strong> Fetches 20 cards per page based on your filters</li>
-            <li>• <strong>Load All Cards from Set:</strong> Fetches ALL cards from the selected set (may take a while for large sets)</li>
-            <li>• Select a set first, then click "Load All Cards from Set" to get the complete set</li>
-          </ul>
-        </div>
       </div>
 
       {/* Cards grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-        {cards?.map((card) => (
-          <div key={card._id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+        {cards?.map(card => (
+          <div
+            key={card._id}
+            className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
+          >
             <div className="aspect-[3/4] bg-gray-100">
               {card.imageUrl ? (
                 <img
@@ -289,28 +318,31 @@ export function CardSearch() {
                 </div>
               )}
             </div>
-            
+
             <div className="p-4">
               <h3 className="font-semibold text-gray-900 mb-1">{card.name}</h3>
-              <p className="text-sm text-gray-600 mb-1">{card.setName}</p>
-              {card.rarity && (
+              <p className="text-sm text-gray-600 mb-2">{card.setName}</p>
+              {/* {card.rarity && (
                 <p className="text-sm text-gray-500 mb-2">{card.rarity}</p>
-              )}
-              {card.types && (
+              )} */}
+              {/* {card.types && (
                 <div className="flex flex-wrap gap-1 mb-2">
                   {card.types.map(type => (
-                    <span key={type} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
+                    <span
+                      key={type}
+                      className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded"
+                    >
                       {type}
                     </span>
                   ))}
                 </div>
-              )}
-              {card.marketPrice && (
+              )} */}
+              {/* {card.marketPrice && (
                 <p className="text-lg font-bold text-green-600 mb-3">
                   ${card.marketPrice.toFixed(2)}
                 </p>
-              )}
-              
+              )} */}
+
               <div className="flex gap-2">
                 <button
                   onClick={() => handleAddToTradeable(card.cardId)}
@@ -337,7 +369,8 @@ export function CardSearch() {
             Ready to search for cards
           </h3>
           <p className="text-gray-500 text-lg">
-            Use the search filters above and click "Search Cards" or "Load All Cards from Set" to get started.
+            Use the search filters above and click "Search Cards" or "Load All
+            Cards from Set" to get started.
           </p>
         </div>
       )}

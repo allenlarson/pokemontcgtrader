@@ -1,11 +1,17 @@
-import { useQuery } from "convex/react";
-import { api } from "../../convex/_generated/api";
-import { useParams, Link } from "react-router-dom";
+import { useQuery } from 'convex/react';
+import { api } from '../../convex/_generated/api';
+import { useParams, Link } from 'react-router-dom';
 
 export function PublicTradeableCards() {
   const { username } = useParams<{ username: string }>();
-  const profile = useQuery(api.profiles.getProfileByUsername, username ? { username } : "skip");
-  const tradeableCards = useQuery(api.cards.getUserTradeableCards, profile ? { userId: profile.userId } : "skip");
+  const profile = useQuery(
+    api.profiles.getProfileByUsername,
+    username ? { username } : 'skip'
+  );
+  const tradeableCards = useQuery(
+    api.cards.getUserTradeableCards,
+    profile ? { userId: profile.userId } : 'skip'
+  );
 
   if (profile === undefined) {
     return (
@@ -20,10 +26,14 @@ export function PublicTradeableCards() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="text-gray-400 text-6xl mb-4">👤</div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Profile Not Found</h1>
-          <p className="text-gray-600 mb-4">The user "{username}" doesn't exist.</p>
-          <Link 
-            to="/" 
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">
+            Profile Not Found
+          </h1>
+          <p className="text-gray-600 mb-4">
+            The user "{username}" doesn't exist.
+          </p>
+          <Link
+            to="/"
             className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
           >
             Go Home
@@ -34,20 +44,28 @@ export function PublicTradeableCards() {
   }
 
   const formatCondition = (condition: string) => {
-    return condition.split('_').map(word => 
-      word.charAt(0).toUpperCase() + word.slice(1)
-    ).join(' ');
+    return condition
+      .split('_')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
   };
 
   const getConditionColor = (condition: string) => {
     switch (condition) {
-      case "mint": return "text-green-600";
-      case "near_mint": return "text-green-500";
-      case "lightly_played": return "text-yellow-600";
-      case "moderately_played": return "text-orange-500";
-      case "heavily_played": return "text-red-500";
-      case "damaged": return "text-red-600";
-      default: return "text-gray-600";
+      case 'mint':
+        return 'text-green-600';
+      case 'near_mint':
+        return 'text-green-500';
+      case 'lightly_played':
+        return 'text-yellow-600';
+      case 'moderately_played':
+        return 'text-orange-500';
+      case 'heavily_played':
+        return 'text-red-500';
+      case 'damaged':
+        return 'text-red-600';
+      default:
+        return 'text-gray-600';
     }
   };
 
@@ -60,8 +78,8 @@ export function PublicTradeableCards() {
             <Link to="/" className="text-2xl font-bold text-blue-600">
               Pokemon TCG Trader
             </Link>
-            <Link 
-              to="/" 
+            <Link
+              to="/"
               className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
             >
               Sign In
@@ -74,7 +92,10 @@ export function PublicTradeableCards() {
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <nav className="flex items-center space-x-2 text-sm">
-            <Link to={`/trade/${username}`} className="text-blue-600 hover:text-blue-700">
+            <Link
+              to={`/trade/${username}`}
+              className="text-blue-600 hover:text-blue-700"
+            >
               {profile.username}
             </Link>
             <span className="text-gray-400">/</span>
@@ -93,19 +114,23 @@ export function PublicTradeableCards() {
               </span>
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">{profile.username}'s Cards for Trade</h1>
-              <p className="text-gray-600">Browse available cards and contact for trades</p>
+              <h1 className="text-3xl font-bold text-gray-900">
+                {profile.username}'s Cards for Trade
+              </h1>
+              <p className="text-gray-600">
+                Browse available cards and contact for trades
+              </p>
             </div>
           </div>
-          
+
           <div className="flex gap-4">
-            <Link 
+            <Link
               to={`/trade/${username}`}
               className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors"
             >
               ← Back to Profile
             </Link>
-            <Link 
+            <Link
               to={`/trade/${username}/wants`}
               className="bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 transition-colors"
             >
@@ -124,8 +149,11 @@ export function PublicTradeableCards() {
 
           {tradeableCards && tradeableCards.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-              {tradeableCards.map((item) => (
-                <div key={item._id} className="border rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+              {tradeableCards.map(item => (
+                <div
+                  key={item._id}
+                  className="border rounded-lg overflow-hidden hover:shadow-md transition-shadow"
+                >
                   <div className="aspect-[3/4] bg-gray-100">
                     {item.card?.imageUrl ? (
                       <img
@@ -141,39 +169,11 @@ export function PublicTradeableCards() {
                   </div>
                   <div className="p-4">
                     <h3 className="font-semibold text-gray-900 mb-1">
-                      {item.card?.name || "Unknown Card"}
+                      {item.card?.name || 'Unknown Card'}
                     </h3>
                     <p className="text-sm text-gray-600 mb-2">
-                      {item.card?.setName || "Unknown Set"}
+                      {item.card?.setName || 'Unknown Set'}
                     </p>
-                    {item.card?.rarity && (
-                      <p className="text-sm text-gray-500 mb-2">{item.card.rarity}</p>
-                    )}
-                    <div className="space-y-1 mb-3">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-500">Condition:</span>
-                        <span className={`font-medium ${getConditionColor(item.condition)}`}>
-                          {formatCondition(item.condition)}
-                        </span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-500">Quantity:</span>
-                        <span className="font-medium">{item.quantity}</span>
-                      </div>
-                      {item.card?.marketPrice && (
-                        <div className="flex justify-between text-sm">
-                          <span className="text-gray-500">Market Price:</span>
-                          <span className="font-bold text-green-600">
-                            ${item.card.marketPrice.toFixed(2)}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                    {item.notes && (
-                      <p className="text-sm text-gray-600 italic mb-3">
-                        "{item.notes}"
-                      </p>
-                    )}
                   </div>
                 </div>
               ))}
@@ -193,14 +193,17 @@ export function PublicTradeableCards() {
 
         {/* Contact Info */}
         <div className="bg-white rounded-lg shadow p-6 mt-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Interested in Trading?</h2>
+          <h2 className="text-xl font-bold text-gray-900 mb-4">
+            Interested in Trading?
+          </h2>
           <p className="text-gray-600 mb-4">
-            Contact {profile.username} through their social media links to discuss potential trades.
+            Contact {profile.username} through their social media links to
+            discuss potential trades.
           </p>
           {profile.socialLinks && (
             <div className="flex gap-4 mb-4">
               {profile.socialLinks.twitter && (
-                <a 
+                <a
                   href={`https://twitter.com/${profile.socialLinks.twitter.replace('@', '')}`}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -210,7 +213,7 @@ export function PublicTradeableCards() {
                 </a>
               )}
               {profile.socialLinks.instagram && (
-                <a 
+                <a
                   href={`https://instagram.com/${profile.socialLinks.instagram.replace('@', '')}`}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -228,7 +231,8 @@ export function PublicTradeableCards() {
           )}
           <div className="bg-blue-50 rounded-lg p-4">
             <p className="text-sm text-blue-800">
-              <strong>Trading Tip:</strong> Always verify card conditions and use secure payment methods when trading online.
+              <strong>Trading Tip:</strong> Always verify card conditions and
+              use secure payment methods when trading online.
             </p>
           </div>
         </div>
