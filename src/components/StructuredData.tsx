@@ -12,7 +12,7 @@ export function StructuredData({ type, data }: StructuredDataProps) {
           '@type': 'Person',
           name: data.username,
           description: data.bio,
-          url: `https://pokemontcgtrader.com/trade/${data.username}`,
+          url: `https://poketrader.app/trade/${data.username}`,
           sameAs: [
             data.socialLinks?.twitter
               ? `https://twitter.com/${data.socialLinks.twitter}`
