@@ -15,6 +15,9 @@ export function CardSearch() {
 
   const [hasSearched, setHasSearched] = useState(false);
 
+  const loggedInUser = useQuery(api.auth.loggedInUser);
+  const ALLOWED_USER_ID = 'kh709f1v2j8f40xzpg1g92cdhn7h3yx7';
+
   const cards = useQuery(
     api.cards.searchCards,
     hasSearched
@@ -109,24 +112,8 @@ export function CardSearch() {
     }
   };
 
-  const handleSearch = async () => {
-    setIsLoading(true);
-    try {
-      await fetchCards({
-        searchTerm: searchTerm || undefined,
-        setId: selectedSet || undefined,
-        page: currentPage,
-        pageSize: 20,
-      });
-      setHasSearched(true); // Enable the query after fetching
-      toast.success('Cards loaded successfully!');
-    } catch (error) {
-      toast.error(
-        'Failed to fetch cards. Please check your API key configuration.'
-      );
-    } finally {
-      setIsLoading(false);
-    }
+  const handleSearch = () => {
+    setHasSearched(true); // Enable the query
   };
 
   const handleLoadAllCardsFromSet = async () => {
@@ -196,20 +183,15 @@ export function CardSearch() {
             Search Pokemon Cards
           </h2>
           <div className="flex gap-2">
-            {/* <button
-              onClick={handleLoadAllSets}
-              disabled={isLoadingSets}
-              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              {isLoadingSets ? "Loading..." : "Load All Sets"}
-            </button> */}
-            <button
-              onClick={handleLoadAllCardsFromSet}
-              disabled={isLoadingAllCards || !selectedSet}
-              className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              {isLoadingAllCards ? 'Loading...' : 'Load All Cards from Set'}
-            </button>
+            {loggedInUser?._id === ALLOWED_USER_ID && (
+              <button
+                onClick={handleLoadAllCardsFromSet}
+                disabled={isLoadingAllCards || !selectedSet}
+                className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                {isLoadingAllCards ? 'Loading...' : 'Load All Cards from Set'}
+              </button>
+            )}
           </div>
         </div>
 
