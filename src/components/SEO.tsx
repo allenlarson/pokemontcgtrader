@@ -11,7 +11,7 @@ interface SEOProps {
 export function SEO({
   title = 'PokéTrader.app - Share your wishlist of tradeable Pokémon cards',
   description = 'Connect with fellow Pokemon TCG trainers, share your collection, and find the cards you need to complete your deck. Create your public trading profile and start trading today!',
-  image = '/og-preview.png',
+  image = '/og.jpg',
   url = 'https://poketrader.app',
   type = 'website',
 }: SEOProps): null {
