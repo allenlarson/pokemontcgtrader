@@ -1,10 +1,12 @@
 import { useQuery, useMutation } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { toast } from 'sonner';
+import { useState } from 'react';
 
 export function TradeableCards() {
   const tradeableCards = useQuery(api.cards.getUserTradeableCards, {});
   const removeFromTradeable = useMutation(api.cards.removeFromTradeableCards);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleRemove = async (cardId: string) => {
     try {
@@ -41,16 +43,43 @@ export function TradeableCards() {
       .join(' ');
   };
 
+  const filteredCards = tradeableCards?.filter(item => {
+    const searchLower = searchQuery.toLowerCase();
+    return (
+      item.card?.name?.toLowerCase().includes(searchLower) ||
+      item.card?.setName?.toLowerCase().includes(searchLower)
+    );
+  });
+
   return (
     <div className="space-y-6">
       <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">
-          My Tradeable Cards
-        </h2>
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold text-gray-900">
+            My Tradeable Cards
+          </h2>
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Search cards..."
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              className="w-64 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+        </div>
 
-        {tradeableCards && tradeableCards.length > 0 ? (
+        {filteredCards && filteredCards.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-            {tradeableCards.map(item => (
+            {filteredCards.map(item => (
               <div
                 key={item._id}
                 className="bg-white border rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow"
@@ -91,11 +120,14 @@ export function TradeableCards() {
           <div className="text-center py-12">
             <div className="text-gray-400 text-6xl mb-4">📦</div>
             <h3 className="text-lg font-medium text-gray-900 mb-2">
-              No tradeable cards yet
+              {searchQuery
+                ? 'No matching cards found'
+                : 'No tradeable cards yet'}
             </h3>
             <p className="text-gray-500 mb-4">
-              Start by searching for cards and adding them to your tradeable
-              collection.
+              {searchQuery
+                ? 'Try adjusting your search terms'
+                : 'Start by searching for cards and adding them to your tradeable collection.'}
             </p>
           </div>
         )}

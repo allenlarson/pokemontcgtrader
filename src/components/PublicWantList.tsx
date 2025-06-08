@@ -1,9 +1,11 @@
 import { useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { useParams, Link } from 'react-router-dom';
+import { useState } from 'react';
 
 export function PublicWantList() {
   const { username } = useParams<{ username: string }>();
+  const [searchQuery, setSearchQuery] = useState('');
   const profile = useQuery(
     api.profiles.getProfileByUsername,
     username ? { username } : 'skip'
@@ -12,6 +14,15 @@ export function PublicWantList() {
     api.cards.getUserWantList,
     profile ? { userId: profile.userId } : 'skip'
   );
+
+  // Filter cards based on search query
+  const filteredWantList = wantList?.filter(item => {
+    const searchLower = searchQuery.toLowerCase();
+    return (
+      item.card?.name?.toLowerCase().includes(searchLower) ||
+      item.card?.setName?.toLowerCase().includes(searchLower)
+    );
+  });
 
   if (profile === undefined) {
     return (
@@ -135,13 +146,35 @@ export function PublicWantList() {
         <div className="bg-white rounded-lg shadow p-6">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-bold text-gray-900">
-              Wanted Cards ({wantList?.length || 0})
+              Wanted Cards ({filteredWantList?.length || 0})
             </h2>
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search cards..."
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                className="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+              <svg
+                className="absolute left-3 top-2.5 h-5 w-5 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+            </div>
           </div>
 
-          {wantList && wantList.length > 0 ? (
+          {filteredWantList && filteredWantList.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-              {wantList.map(item => (
+              {filteredWantList.map(item => (
                 <div
                   key={item._id}
                   className="border rounded-lg overflow-hidden hover:shadow-md transition-shadow"
