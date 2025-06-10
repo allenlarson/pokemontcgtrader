@@ -46,16 +46,8 @@ export function CardSearch() {
     'Psychic',
     'Ice',
     'Fighting',
-    'Poison',
-    'Ground',
-    'Flying',
-    'Bug',
-    'Rock',
-    'Ghost',
-    'Dragon',
     'Dark',
     'Steel',
-    'Fairy',
     'Normal',
   ];
 
