@@ -42,13 +42,12 @@ export function CardSearch() {
     'Fire',
     'Water',
     'Grass',
-    'Electric',
+    'Lightning',
     'Psychic',
-    'Ice',
     'Fighting',
-    'Dark',
-    'Steel',
-    'Normal',
+    'Darkness',
+    'Metal',
+    'Colorless',
   ];
 
   const rarities = [
