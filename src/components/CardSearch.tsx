@@ -283,7 +283,7 @@ export function CardSearch() {
                 <img
                   src={card.imageUrl}
                   alt={card.name}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full"
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-gray-400">

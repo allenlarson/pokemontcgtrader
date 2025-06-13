@@ -1,30 +1,30 @@
-import { useState } from "react";
-import { useQuery, useMutation } from "convex/react";
-import { api } from "../../convex/_generated/api";
-import { toast } from "sonner";
+import { useState } from 'react';
+import { useQuery, useMutation } from 'convex/react';
+import { api } from '../../convex/_generated/api';
+import { toast } from 'sonner';
 
 export function UserProfile() {
   const userProfile = useQuery(api.profiles.getCurrentUserProfile);
   const tradeableCards = useQuery(api.cards.getUserTradeableCards, {});
   const wantList = useQuery(api.cards.getUserWantList, {});
   const updateProfile = useMutation(api.profiles.updateProfile);
-  
+
   const [isEditing, setIsEditing] = useState(false);
-  const [bio, setBio] = useState("");
+  const [bio, setBio] = useState('');
   const [socialLinks, setSocialLinks] = useState({
-    twitter: "",
-    instagram: "",
-    discord: "",
+    twitter: '',
+    instagram: '',
+    discord: '',
   });
 
   // Initialize form when profile loads
-  if (userProfile && !isEditing && bio === "") {
-    setBio(userProfile.bio || "");
+  if (userProfile && !isEditing && bio === '') {
+    setBio(userProfile.bio || '');
     const links = userProfile.socialLinks || {};
     setSocialLinks({
-      twitter: links.twitter || "",
-      instagram: links.instagram || "",
-      discord: links.discord || "",
+      twitter: links.twitter || '',
+      instagram: links.instagram || '',
+      discord: links.discord || '',
     });
   }
 
@@ -39,20 +39,20 @@ export function UserProfile() {
         },
       });
       setIsEditing(false);
-      toast.success("Profile updated successfully!");
+      toast.success('Profile updated successfully!');
     } catch (error) {
-      toast.error("Failed to update profile");
+      toast.error('Failed to update profile');
     }
   };
 
   const handleCancel = () => {
     if (userProfile) {
-      setBio(userProfile.bio || "");
+      setBio(userProfile.bio || '');
       const links = userProfile.socialLinks || {};
       setSocialLinks({
-        twitter: links.twitter || "",
-        instagram: links.instagram || "",
-        discord: links.discord || "",
+        twitter: links.twitter || '',
+        instagram: links.instagram || '',
+        discord: links.discord || '',
       });
     }
     setIsEditing(false);
@@ -61,7 +61,7 @@ export function UserProfile() {
   const copyProfileLink = () => {
     const profileUrl = `${window.location.origin}/trade/${userProfile?.username}`;
     navigator.clipboard.writeText(profileUrl);
-    toast.success("Profile link copied to clipboard!");
+    toast.success('Profile link copied to clipboard!');
   };
 
   if (!userProfile) {
@@ -73,7 +73,11 @@ export function UserProfile() {
   }
 
   const profileUrl = `${window.location.origin}/trade/${userProfile.username}`;
-  const totalValue = tradeableCards?.reduce((sum, item) => sum + (item.card?.marketPrice || 0) * item.quantity, 0) || 0;
+  const totalValue =
+    tradeableCards?.reduce(
+      (sum, item) => sum + (item.card?.marketPrice || 0) * item.quantity,
+      0
+    ) || 0;
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
@@ -81,38 +85,46 @@ export function UserProfile() {
         <div className="flex justify-between items-start mb-6">
           <div>
             <h2 className="text-2xl font-bold text-gray-900">My Profile</h2>
-            <p className="text-gray-600 mt-1">
-              Your public trading profile
-            </p>
+            <p className="text-gray-600 mt-1">Your public trading profile</p>
           </div>
-          {!isEditing ? (
+          <div>
+            {!isEditing ? (
+              <button
+                onClick={() => setIsEditing(true)}
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Edit Profile
+              </button>
+            ) : (
+              <div className="flex gap-2">
+                <button
+                  onClick={handleSave}
+                  className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
+                >
+                  Save
+                </button>
+                <button
+                  onClick={handleCancel}
+                  className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
             <button
-              onClick={() => setIsEditing(true)}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+              onClick={() => (window.location.href = profileUrl)}
+              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-color ml-2"
             >
-              Edit Profile
+              View Profile
             </button>
-          ) : (
-            <div className="flex gap-2">
-              <button
-                onClick={handleSave}
-                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
-              >
-                Save
-              </button>
-              <button
-                onClick={handleCancel}
-                className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors"
-              >
-                Cancel
-              </button>
-            </div>
-          )}
+          </div>
         </div>
 
         {/* Public Profile Link */}
         <div className="bg-blue-50 rounded-lg p-4 mb-6">
-          <h3 className="font-medium text-blue-900 mb-2">Public Profile Link</h3>
+          <h3 className="font-medium text-blue-900 mb-2">
+            Public Profile Link
+          </h3>
           <div className="flex items-center gap-2">
             <input
               type="text"
@@ -145,7 +157,9 @@ export function UserProfile() {
                 disabled
                 className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-500"
               />
-              <p className="text-xs text-gray-500 mt-1">Username cannot be changed</p>
+              <p className="text-xs text-gray-500 mt-1">
+                Username cannot be changed
+              </p>
             </div>
 
             <div>
@@ -154,7 +168,7 @@ export function UserProfile() {
               </label>
               <input
                 type="email"
-                value={userProfile.email || ""}
+                value={userProfile.email || ''}
                 disabled
                 className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-500"
               />
@@ -169,21 +183,25 @@ export function UserProfile() {
             {isEditing ? (
               <textarea
                 value={bio}
-                onChange={(e) => setBio(e.target.value)}
+                onChange={e => setBio(e.target.value)}
                 rows={4}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Tell other traders about yourself, your collecting interests, trading preferences, etc."
               />
             ) : (
               <div className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 min-h-[100px]">
-                {bio || <span className="text-gray-500 italic">No bio added yet</span>}
+                {bio || (
+                  <span className="text-gray-500 italic">No bio added yet</span>
+                )}
               </div>
             )}
           </div>
 
           {/* Social Links */}
           <div>
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Social Links</h3>
+            <h3 className="text-lg font-medium text-gray-900 mb-4">
+              Social Links
+            </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -193,13 +211,20 @@ export function UserProfile() {
                   <input
                     type="text"
                     value={socialLinks.twitter}
-                    onChange={(e) => setSocialLinks(prev => ({ ...prev, twitter: e.target.value }))}
+                    onChange={e =>
+                      setSocialLinks(prev => ({
+                        ...prev,
+                        twitter: e.target.value,
+                      }))
+                    }
                     placeholder="@username"
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 ) : (
                   <div className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50">
-                    {socialLinks.twitter || <span className="text-gray-500 italic">Not set</span>}
+                    {socialLinks.twitter || (
+                      <span className="text-gray-500 italic">Not set</span>
+                    )}
                   </div>
                 )}
               </div>
@@ -212,13 +237,20 @@ export function UserProfile() {
                   <input
                     type="text"
                     value={socialLinks.instagram}
-                    onChange={(e) => setSocialLinks(prev => ({ ...prev, instagram: e.target.value }))}
+                    onChange={e =>
+                      setSocialLinks(prev => ({
+                        ...prev,
+                        instagram: e.target.value,
+                      }))
+                    }
                     placeholder="@username"
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 ) : (
                   <div className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50">
-                    {socialLinks.instagram || <span className="text-gray-500 italic">Not set</span>}
+                    {socialLinks.instagram || (
+                      <span className="text-gray-500 italic">Not set</span>
+                    )}
                   </div>
                 )}
               </div>
@@ -231,40 +263,24 @@ export function UserProfile() {
                   <input
                     type="text"
                     value={socialLinks.discord}
-                    onChange={(e) => setSocialLinks(prev => ({ ...prev, discord: e.target.value }))}
+                    onChange={e =>
+                      setSocialLinks(prev => ({
+                        ...prev,
+                        discord: e.target.value,
+                      }))
+                    }
                     placeholder="username#1234"
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 ) : (
                   <div className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50">
-                    {socialLinks.discord || <span className="text-gray-500 italic">Not set</span>}
+                    {socialLinks.discord || (
+                      <span className="text-gray-500 italic">Not set</span>
+                    )}
                   </div>
                 )}
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Profile Stats */}
-      <div className="bg-white rounded-lg shadow p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Profile Stats</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="text-center">
-            <div className="text-2xl font-bold text-blue-600">{tradeableCards?.length || 0}</div>
-            <div className="text-sm text-gray-500">Cards for Trade</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-yellow-600">{wantList?.length || 0}</div>
-            <div className="text-sm text-gray-500">Cards Wanted</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-green-600">0</div>
-            <div className="text-sm text-gray-500">Completed Trades</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-purple-600">${totalValue.toFixed(2)}</div>
-            <div className="text-sm text-gray-500">Total Value</div>
           </div>
         </div>
       </div>

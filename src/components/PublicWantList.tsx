@@ -184,7 +184,7 @@ export function PublicWantList() {
                       <img
                         src={item.card.imageUrl}
                         alt={item.card.name}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-gray-400">
@@ -192,14 +192,14 @@ export function PublicWantList() {
                       </div>
                     )}
                   </div>
-                  <div className="p-4">
-                    <h3 className="font-semibold text-gray-900 mb-1">
+                  {/* <div className="p-4"> */}
+                  {/* <h3 className="font-semibold text-gray-900 mb-1">
                       {item.card?.name || 'Unknown Card'}
                     </h3>
                     <p className="text-sm text-gray-600 mb-2">
                       {item.card?.setName || 'Unknown Set'}
-                    </p>
-                    {/* {item.card?.rarity && (
+                    </p> */}
+                  {/* {item.card?.rarity && (
                       <p className="text-sm text-gray-500 mb-2">{item.card.rarity}</p>
                     )}
                     <div className="space-y-2 mb-3">
@@ -229,7 +229,7 @@ export function PublicWantList() {
                         "{item.notes}"
                       </p>
                     )} */}
-                  </div>
+                  {/* </div> */}
                 </div>
               ))}
             </div>

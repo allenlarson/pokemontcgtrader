@@ -133,7 +133,7 @@ export function PublicTradingProfile() {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mb-8">
+          {/* <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mb-8">
             <div className="bg-white rounded-lg shadow p-4 text-center">
               <div className="text-2xl font-bold text-blue-600">
                 {tradeableCards?.length || 0}
@@ -146,7 +146,7 @@ export function PublicTradingProfile() {
               </div>
               <div className="text-sm text-gray-500">Cards Wanted</div>
             </div>
-          </div>
+          </div> */}
 
           {/* Navigation Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">

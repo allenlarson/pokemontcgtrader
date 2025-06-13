@@ -192,7 +192,7 @@ export function PublicTradeableCards() {
                       <img
                         src={item.card.imageUrl}
                         alt={item.card.name}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-gray-400">
@@ -200,14 +200,14 @@ export function PublicTradeableCards() {
                       </div>
                     )}
                   </div>
-                  <div className="p-4">
+                  {/* <div className="p-4">
                     <h3 className="font-semibold text-gray-900 mb-1">
                       {item.card?.name || 'Unknown Card'}
                     </h3>
                     <p className="text-sm text-gray-600 mb-2">
                       {item.card?.setName || 'Unknown Set'}
                     </p>
-                  </div>
+                  </div> */}
                 </div>
               ))}
             </div>

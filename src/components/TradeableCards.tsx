@@ -89,7 +89,7 @@ export function TradeableCards() {
                     <img
                       src={item.card.imageUrl}
                       alt={item.card.name}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-gray-400">
